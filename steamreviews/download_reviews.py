@@ -283,6 +283,7 @@ def download_reviews_for_app_id(
     chosen_request_params=None,
     start_cursor="*",  # this could be useful to resume a failed download of older reviews
     verbose=False,
+    save_json=True
 ):
     rate_limits = get_steam_api_rate_limits()
 
@@ -431,8 +432,9 @@ def download_reviews_for_app_id(
         if review_id not in previous_review_ids:
             review_dict["reviews"][review_id] = review
 
-    with Path(get_output_filename(app_id)).open("w") as f:
-        f.write(json.dumps(review_dict) + "\n")
+    if save_json:
+        with Path(get_output_filename(app_id)).open("w") as f:
+            f.write(json.dumps(review_dict) + "\n")
 
     return review_dict, query_count
 
